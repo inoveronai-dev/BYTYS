@@ -46,7 +46,7 @@ export function Header() {
       {overHero ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/45 via-black/20 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/28 via-black/10 to-transparent"
         />
       ) : null}
 
