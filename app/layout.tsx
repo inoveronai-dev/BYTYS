@@ -3,6 +3,7 @@ import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Main } from "@/components/layout/Main";
+import { SplashScreen } from "@/components/layout/SplashScreen";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -36,7 +37,15 @@ export default function RootLayout({
       lang="sk"
       className={`${sourceSans.variable} ${sourceSerif.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(sessionStorage.getItem("bytys-splash-seen")!=="1"){document.documentElement.setAttribute("data-splash","1");}}catch(e){document.documentElement.setAttribute("data-splash","1");}})();`,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        <SplashScreen />
         <Header />
         <Main>{children}</Main>
         <Footer />

@@ -38,7 +38,7 @@ export function StoryImage({
           fill
           priority={priority}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1100px"
-          className="object-cover transition duration-700 ease-out group-hover:scale-[1.015]"
+          className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
           style={{ objectPosition }}
         />
       ) : (

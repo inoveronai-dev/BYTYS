@@ -6,12 +6,12 @@ import { site } from "@/data/site";
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-border bg-surface">
+    <footer className="mt-auto border-t border-white/10 bg-navy-deep">
       <Container className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.2fr_1fr_1fr]">
         <div>
           <BrandLogo height={34} />
-          <p className="mt-4 text-sm text-muted">{site.name}</p>
-          <p className="mt-1 text-sm text-muted">{site.city}</p>
+          <p className="mt-4 text-sm text-white/55">{site.name}</p>
+          <p className="mt-1 text-sm text-white/45">{site.city}</p>
         </div>
 
         <nav aria-label="Pätička">
@@ -20,7 +20,7 @@ export function Footer() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-sm text-foreground/80 transition hover:text-green"
+                  className="text-sm text-white/70 transition hover:text-green-soft"
                 >
                   {item.label}
                 </Link>
@@ -33,7 +33,7 @@ export function Footer() {
           <p>
             <a
               href={site.phoneHref}
-              className="font-medium text-blue transition hover:text-green"
+              className="font-medium text-white transition hover:text-green-soft"
             >
               {site.phone}
             </a>
@@ -41,12 +41,12 @@ export function Footer() {
           <p>
             <a
               href={site.emailHref}
-              className="text-blue transition hover:text-green"
+              className="text-white/80 transition hover:text-green-soft"
             >
               {site.email}
             </a>
           </p>
-          <p className="pt-3 text-xs leading-relaxed text-muted">
+          <p className="pt-3 text-xs leading-relaxed text-white/40">
             IČO: {site.ico}
             <br />
             DIČ: {site.dic}
