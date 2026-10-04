@@ -23,38 +23,40 @@ export function Hero() {
       <div className="relative z-10 flex min-h-[90svh] flex-col sm:min-h-[95svh] lg:min-h-screen">
         <div className="h-[4.25rem] shrink-0 sm:h-[4.75rem]" aria-hidden />
 
-        <div className="flex flex-1 items-center px-5 pb-20 pt-8 sm:px-8 sm:pb-24 lg:px-10 lg:pt-4">
-          <div className="relative mx-auto w-full max-w-2xl text-center lg:mx-0 lg:max-w-[34rem] lg:text-left xl:max-w-[36rem]">
-            {/* Localized contrast pocket behind copy only */}
+        <div className="mx-auto flex w-full max-w-6xl flex-1 items-center px-5 pb-16 pt-6 sm:px-8 sm:pb-20 lg:px-10 lg:pb-24 lg:pt-0">
+          {/* Slightly above true center for calmer balance */}
+          <div className="relative w-full max-w-[34rem] -translate-y-4 text-left sm:-translate-y-6 lg:max-w-[36rem] lg:-translate-y-8">
             <div
               aria-hidden
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[135%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-[48%] bg-[radial-gradient(ellipse_at_center,rgba(6,16,30,0.48)_0%,rgba(6,16,30,0.22)_46%,transparent_74%)] lg:left-0 lg:translate-x-0 lg:bg-[radial-gradient(ellipse_at_left,rgba(6,16,30,0.44)_0%,rgba(6,16,30,0.18)_50%,transparent_76%)]"
+              className="pointer-events-none absolute -left-6 top-1/2 h-[125%] w-[115%] -translate-y-1/2 rounded-[46%] bg-[radial-gradient(ellipse_at_left,rgba(6,16,30,0.38)_0%,rgba(6,16,30,0.14)_52%,transparent_76%)] sm:-left-8"
             />
 
             <div className="relative">
-              <h1 className="font-serif text-[2.05rem] font-semibold leading-[1.18] tracking-[-0.01em] text-white [text-shadow:0_2px_4px_rgba(6,16,30,0.55),0_6px_28px_rgba(6,16,30,0.4)] sm:text-[2.75rem] sm:leading-[1.14] lg:text-[3.25rem] lg:leading-[1.12]">
-                {site.heroHeadline}
+              <h1 className="max-w-[22rem] font-serif text-[2rem] font-semibold leading-[1.08] tracking-[-0.015em] text-white [text-shadow:0_1px_3px_rgba(6,16,30,0.5),0_4px_22px_rgba(6,16,30,0.35)] sm:max-w-[28rem] sm:text-[2.55rem] sm:leading-[1.06] lg:max-w-[34rem] lg:text-[3rem] lg:leading-[1.05]">
+                Správa domov.
+                <br />
+                S porozumením pre ľudí.
               </h1>
 
               <span
                 aria-hidden
-                className="mt-7 inline-block h-px w-12 bg-green shadow-[0_0_12px_rgba(61,107,79,0.45)] sm:mt-8 sm:w-14"
+                className="mt-5 inline-block h-px w-10 bg-green sm:mt-6 sm:w-12"
               />
 
-              <p className="mt-7 max-w-xl text-base font-medium leading-relaxed text-white [text-shadow:0_1px_3px_rgba(6,16,30,0.5),0_3px_18px_rgba(6,16,30,0.38)] sm:mt-8 sm:text-lg lg:text-[1.15rem]">
+              <p className="mt-5 max-w-[30rem] text-[0.95rem] font-medium leading-[1.55] text-white/92 [text-shadow:0_1px_3px_rgba(6,16,30,0.45),0_2px_14px_rgba(6,16,30,0.3)] sm:mt-6 sm:max-w-[32rem] sm:text-base sm:leading-[1.6]">
                 {site.heroSupport}
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 sm:mt-12 lg:justify-start">
+              <div className="mt-7 flex flex-wrap items-center gap-x-7 gap-y-3 sm:mt-8">
                 <a
                   href="/o-nas"
-                  className="inline-flex items-center border border-white/65 bg-black/15 px-5 py-2.5 text-sm font-semibold tracking-wide text-white shadow-[0_2px_16px_rgba(6,16,30,0.25)] backdrop-blur-[2px] transition hover:border-white hover:bg-black/25"
+                  className="inline-flex items-center border border-white/60 bg-black/12 px-4 py-2 text-sm font-semibold tracking-wide text-white transition hover:border-white hover:bg-black/20"
                 >
                   Spoznať náš príbeh
                 </a>
                 <a
                   href="/spojenie"
-                  className="inline-flex items-center text-sm font-semibold tracking-wide text-white [text-shadow:0_1px_3px_rgba(6,16,30,0.45)] underline-offset-4 transition hover:underline"
+                  className="inline-flex items-center text-sm font-semibold tracking-wide text-white/95 [text-shadow:0_1px_3px_rgba(6,16,30,0.4)] underline-offset-4 transition hover:underline"
                 >
                   Spojenie →
                 </a>

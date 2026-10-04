@@ -2,9 +2,9 @@ export const site = {
   name: "BYTYS s.r.o.",
   shortName: "BYTYS",
   tagline: "SPRÁVCA BYTOVÝCH DOMOV",
-  heroHeadline: "Priestor pre ľudí žijúcich v bytových domoch.",
+  heroHeadline: "Správa domov. S porozumením pre ľudí.",
   heroSupport:
-    "Správa bytových domov postavená na skúsenostiach, zodpovednosti a porozumení každodennému životu v dome.",
+    "Skúsenosti so životom v bytovom dome pretavené do každodennej správy.",
   welcome: "Vitajte v priestore venovanom ľuďom žijúcim v bytových domoch",
   contactPerson: "Radoslav Tokoš",
   phone: "0911 116 793",
