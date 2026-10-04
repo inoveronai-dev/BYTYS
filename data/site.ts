@@ -2,8 +2,9 @@ export const site = {
   name: "BYTYS s.r.o.",
   shortName: "BYTYS",
   tagline: "SPRÁVCA BYTOVÝCH DOMOV",
-  heroHeadline: "Správa bytových domov založená na skúsenostiach.",
-  heroSupport: "Priestor venovaný ľuďom žijúcim v bytových domoch.",
+  heroHeadline: "Priestor pre ľudí žijúcich v bytových domoch.",
+  heroSupport:
+    "Správa bytových domov postavená na skúsenostiach, zodpovednosti a porozumení každodennému životu v dome.",
   welcome: "Vitajte v priestore venovanom ľuďom žijúcim v bytových domoch",
   contactPerson: "Radoslav Tokoš",
   phone: "0911 116 793",
@@ -30,5 +31,5 @@ export const site = {
   logoSrc: "/logo-bytys.png",
   logoWidth: 512,
   logoHeight: 156,
-  heroImageSrc: "/hero-city.jpg",
+  heroImageSrc: "/BYTYS_hero_facade.jpg",
 } as const;
