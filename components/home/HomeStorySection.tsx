@@ -10,7 +10,7 @@ export function HomeStorySection() {
   return (
     <section
       id="onas"
-      className="relative overflow-hidden bg-background py-24 sm:py-32"
+      className="relative overflow-hidden bg-background pt-24 pb-28 sm:pt-32 sm:pb-40"
     >
       <div
         aria-hidden

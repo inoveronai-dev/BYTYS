@@ -13,8 +13,8 @@ export default function HomePage() {
     <>
       <Hero />
       <HomeStorySection />
-      <HomeStoriesSection />
       <SectionLogoBridge />
+      <HomeStoriesSection />
       <HomePhotoInterlude />
       <BrandThread>
         <HomeCertificatesSection />

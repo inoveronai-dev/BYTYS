@@ -63,7 +63,7 @@ export function HomeStoriesSection() {
   return (
     <section
       id="pribehy"
-      className="relative bg-stone pt-24 pb-28 sm:pt-32 sm:pb-40"
+      className="relative bg-stone pt-28 pb-24 sm:pt-40 sm:pb-32"
     >
       <span
         aria-hidden

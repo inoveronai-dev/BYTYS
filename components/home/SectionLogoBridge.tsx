@@ -1,8 +1,8 @@
 import { BrandLogo } from "@/components/ui/BrandLogo";
 
 /**
- * Centered logo sitting on the seam between the light Príbehy section
- * and the dark photo interlude — half over each background.
+ * Centered logo on the seam between O nás and Príbehy —
+ * half over each section background.
  */
 export function SectionLogoBridge() {
   return (
@@ -12,7 +12,7 @@ export function SectionLogoBridge() {
           <BrandLogo
             href={null}
             height={88}
-            className="[filter:drop-shadow(0_1px_1px_rgba(247,245,241,0.65))_drop-shadow(0_2px_8px_rgba(6,14,28,0.2))]"
+            className="[filter:drop-shadow(0_1px_2px_rgba(255,255,255,0.7))_drop-shadow(0_2px_10px_rgba(19,37,61,0.12))]"
           />
         </div>
       </div>
