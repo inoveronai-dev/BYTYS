@@ -159,8 +159,8 @@ export const pribehy: Pribeh[] = [
     imageSlot: "story-07",
     imageSrc: "/stories/story-07.jpg",
     imageAlt:
-      "Fasáda bytového domu večer s osvetlenými oknami",
-    objectPosition: "50% 45%",
+      "Domová kotolňa s kotlami, čerpadlami a rozvodmi potrubí",
+    objectPosition: "45% 48%",
     paragraphs: [
       "Ako príklad uvádzam 8 podlažný dom, 3 vchody, 69 bytov:",
     ],
