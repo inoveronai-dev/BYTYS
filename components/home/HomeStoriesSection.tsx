@@ -61,7 +61,10 @@ export function HomeStoriesSection() {
   const [s01, s02, s03, s04, s05, s06, s07, s08] = pribehy;
 
   return (
-    <section id="pribehy" className="relative bg-stone py-24 sm:py-32">
+    <section
+      id="pribehy"
+      className="relative bg-stone pt-24 pb-28 sm:pt-32 sm:pb-40"
+    >
       <span
         aria-hidden
         className="pointer-events-none absolute left-4 top-12 font-serif text-[7rem] leading-none text-blue/[0.04] sm:left-8 sm:text-[9rem]"
