@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 /**
  * Cinematic pause between Príbehy and informational sections.
- * Transform-based parallax on desktop; static on mobile / reduced motion.
+ * Scroll-linked parallax: image translateY tracks section progress through the viewport.
  */
 export function HomePhotoInterlude() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -13,47 +13,71 @@ export function HomePhotoInterlude() {
   const [titleVisible, setTitleVisible] = useState(false);
 
   useEffect(() => {
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     const section = sectionRef.current;
     const media = mediaRef.current;
     if (!section || !media) return;
 
-    if (reduced) {
-      setTitleVisible(true);
-      media.style.transform = "translate3d(0, 0, 0) scale(1)";
-      return;
-    }
-
-    let frame = 0;
+    const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const desktopQuery = window.matchMedia("(min-width: 768px)");
 
+    let frame = 0;
+    let lastY = Number.NaN;
+
+    const applyStatic = (scale: number) => {
+      lastY = 0;
+      media.style.transform = `translate3d(0, 0, 0) scale(${scale})`;
+    };
+
     const update = () => {
+      frame = 0;
+
+      if (reducedQuery.matches) {
+        applyStatic(1);
+        return;
+      }
+
+      // Mobile: keep a light oversize, no parallax travel
       if (!desktopQuery.matches) {
-        media.style.transform = "translate3d(0, 0, 0) scale(1.06)";
+        applyStatic(1.08);
         return;
       }
 
       const rect = section.getBoundingClientRect();
       const viewH = window.innerHeight || 1;
-      // -1 when section center is below viewport mid, +1 when above
-      const progress = (viewH / 2 - (rect.top + rect.height / 2)) / viewH;
-      const clamped = Math.max(-1, Math.min(1, progress));
-      // Visible but restrained shift (~±9% of section height)
-      const travel = Math.min(rect.height * 0.09, 88);
-      const y = clamped * travel;
-      media.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(1.14)`;
+      // 0 = section top at viewport bottom; 1 = section bottom at viewport top
+      const travelDistance = viewH + rect.height;
+      const raw = (viewH - rect.top) / travelDistance;
+      const progress = Math.max(0, Math.min(1, raw));
+
+      // ~160px total travel: starts higher, drifts downward through the section
+      const maxShift = 80;
+      const y = -maxShift + progress * (maxShift * 2);
+
+      if (Math.abs(y - lastY) < 0.1) return;
+      lastY = y;
+      media.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(1.1)`;
     };
 
-    const onScroll = () => {
-      cancelAnimationFrame(frame);
+    const schedule = () => {
+      if (frame) return;
       frame = requestAnimationFrame(update);
     };
 
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll, { passive: true });
-    desktopQuery.addEventListener("change", onScroll);
+    if (reducedQuery.matches) {
+      setTitleVisible(true);
+      applyStatic(1);
+    } else if (!desktopQuery.matches) {
+      applyStatic(1.08);
+    } else {
+      // Start shifted up so entry into the section is visibly parallaxed
+      media.style.transform = "translate3d(0, -80px, 0) scale(1.1)";
+      schedule();
+    }
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    reducedQuery.addEventListener("change", schedule);
+    desktopQuery.addEventListener("change", schedule);
 
     const titleObserver = new IntersectionObserver(
       ([entry]) => {
@@ -67,10 +91,11 @@ export function HomePhotoInterlude() {
     titleObserver.observe(section);
 
     return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      desktopQuery.removeEventListener("change", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      reducedQuery.removeEventListener("change", schedule);
+      desktopQuery.removeEventListener("change", schedule);
       titleObserver.disconnect();
     };
   }, []);
@@ -83,7 +108,7 @@ export function HomePhotoInterlude() {
     >
       <div
         ref={mediaRef}
-        className="absolute inset-[-12%] will-change-transform"
+        className="absolute inset-[-14%] will-change-transform"
         style={{ transformOrigin: "50% 45%" }}
       >
         <Image
