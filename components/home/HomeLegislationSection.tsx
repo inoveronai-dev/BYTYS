@@ -45,15 +45,23 @@ const icons = {
   ),
 } as const;
 
+const blockHeights = [
+  "sm:min-h-[280px] lg:min-h-[320px] lg:pt-10 lg:pb-12",
+  "sm:min-h-[250px] lg:min-h-[280px] lg:pt-8 lg:pb-10 lg:mt-6",
+  "sm:min-h-[260px] lg:min-h-[300px] lg:pt-9 lg:pb-11 lg:mt-3",
+];
+
 export function HomeLegislationSection() {
   return (
-    <section className="relative bg-blue-tint py-24 sm:py-28">
-      <span
+    <section className="relative overflow-hidden bg-blue-tint py-24 sm:py-28">
+      <div
         aria-hidden
-        className="pointer-events-none absolute right-6 top-10 font-serif text-[7rem] leading-none text-blue/[0.04] sm:right-10 sm:text-[9rem]"
-      >
-        04
-      </span>
+        className="pointer-events-none absolute -left-20 top-0 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(30,58,95,0.08),transparent_68%)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 bottom-0 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(61,107,79,0.07),transparent_70%)]"
+      />
 
       <Container className="relative">
         <Reveal>
@@ -64,29 +72,36 @@ export function HomeLegislationSection() {
           />
         </Reveal>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-3">
+        <div className="mt-14 grid gap-5 sm:grid-cols-3 sm:items-start">
           {legislativaCategories.map((category, index) => (
-            <Reveal key={category.id} delayMs={index * 90}>
+            <Reveal key={category.id} delayMs={index * 100}>
               <Link
                 href={`/legislativa#${category.id}`}
-                className="group relative block border border-blue/10 bg-surface-elevated px-6 py-8 transition hover:-translate-y-0.5 hover:border-green/35"
+                className={`group relative block overflow-hidden border border-blue/10 bg-surface-elevated px-6 py-8 transition duration-300 hover:-translate-y-[3px] hover:border-green/30 ${blockHeights[index]}`}
               >
                 <span
                   aria-hidden
-                  className="absolute left-0 top-0 h-full w-0.5 origin-top scale-y-0 bg-green transition group-hover:scale-y-100"
+                  className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-green transition duration-300 group-hover:scale-x-100"
                 />
-                <div className="flex items-start justify-between gap-4">
-                  <p className="font-serif text-4xl tabular-nums text-green sm:text-5xl">
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-2 -top-4 font-serif text-[6.5rem] leading-none text-blue/[0.05] transition group-hover:text-green/[0.08]"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
+                <div className="relative flex items-start justify-between gap-4">
+                  <p className="font-serif text-5xl tabular-nums text-green transition group-hover:text-green-soft sm:text-6xl">
                     {String(index + 1).padStart(2, "0")}
                   </p>
-                  <span className="text-blue/55 transition group-hover:text-green">
+                  <span className="text-blue/50 transition duration-300 group-hover:translate-x-1 group-hover:text-green">
                     {icons[category.id as keyof typeof icons]}
                   </span>
                 </div>
-                <h3 className="mt-8 font-serif text-2xl text-blue">
+                <h3 className="relative mt-10 font-serif text-2xl text-blue sm:text-[1.65rem]">
                   {category.heading}
                 </h3>
-                <p className="mt-3 text-sm text-muted">
+                <p className="relative mt-4 text-sm text-muted">
                   {category.items.length} {countLabel(category.items.length)}
                 </p>
               </Link>
@@ -94,7 +109,7 @@ export function HomeLegislationSection() {
           ))}
         </div>
 
-        <Reveal delayMs={120} className="mt-12">
+        <Reveal delayMs={140} className="mt-12">
           <ButtonLink href="/legislativa" variant="secondary">
             Otvoriť legislatívu
           </ButtonLink>

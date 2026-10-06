@@ -2,13 +2,23 @@ import { site } from "@/data/site";
 
 type ContactBlockProps = {
   variant?: "light" | "dark";
+  /** stack = single column (for homepage split with photo) */
+  layout?: "split" | "stack";
 };
 
-export function ContactBlock({ variant = "light" }: ContactBlockProps) {
+export function ContactBlock({
+  variant = "light",
+  layout = "split",
+}: ContactBlockProps) {
   const dark = variant === "dark";
+  const stack = layout === "stack";
 
   return (
-    <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+    <div
+      className={`grid ${
+        stack ? "gap-10" : "gap-12 lg:grid-cols-2 lg:gap-16"
+      }`}
+    >
       <div>
         <p
           className={`font-serif text-3xl sm:text-4xl ${
@@ -68,10 +78,14 @@ export function ContactBlock({ variant = "light" }: ContactBlockProps) {
       </div>
 
       <div
-        className={`space-y-10 pt-10 lg:pt-0 ${
-          dark
-            ? "border-t border-white/15 lg:border-l lg:border-t-0 lg:pl-16"
-            : "border-t border-border lg:border-l lg:border-t-0 lg:pl-16"
+        className={`space-y-10 pt-10 ${
+          stack
+            ? dark
+              ? "border-t border-white/15"
+              : "border-t border-border"
+            : dark
+              ? "border-t border-white/15 lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0"
+              : "border-t border-border lg:border-l lg:border-t-0 lg:pl-16 lg:pt-0"
         }`}
       >
         <div>

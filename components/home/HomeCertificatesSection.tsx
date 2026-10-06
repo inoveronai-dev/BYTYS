@@ -10,7 +10,7 @@ function DocIcon() {
   return (
     <span
       aria-hidden
-      className="flex h-12 w-12 shrink-0 items-center justify-center border border-border bg-blue-tint text-green"
+      className="flex h-12 w-12 shrink-0 items-center justify-center border border-border/80 bg-surface-elevated text-green transition group-hover:border-green/35 group-hover:bg-blue-tint group-hover:text-green-soft"
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
         <path
@@ -45,7 +45,7 @@ export function HomeCertificatesSection() {
             </div>
           </Reveal>
 
-          <div className="space-y-4 lg:col-span-8">
+          <div className="space-y-5 lg:col-span-8">
             {certifikaty.map((item, index) => {
               const body = (
                 <>
@@ -60,7 +60,7 @@ export function HomeCertificatesSection() {
                   </span>
                   <span
                     aria-hidden
-                    className="text-green transition group-hover:translate-x-1"
+                    className="translate-x-0 text-green transition duration-300 group-hover:translate-x-1.5"
                   >
                     →
                   </span>
@@ -68,10 +68,10 @@ export function HomeCertificatesSection() {
               );
 
               const className =
-                "group flex items-start gap-5 border border-border bg-blue-tint/40 px-5 py-6 transition hover:-translate-y-0.5 hover:border-green/40";
+                "group flex items-start gap-5 border border-border bg-blue-tint/50 px-6 py-7 transition duration-300 hover:-translate-y-0.5 hover:border-green/45 hover:bg-blue-tint";
 
               return (
-                <Reveal key={item.title} delayMs={index * 80}>
+                <Reveal key={item.title} delayMs={index * 110}>
                   {item.href ? (
                     <Link href={item.href} className={className}>
                       {body}
