@@ -1,143 +1,55 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Cinematic pause between Príbehy and informational sections.
- * Scroll-linked parallax: image translateY tracks section progress through the viewport.
+ * Editorial pause matching the classic fixed-background technique
+ * (same principle as TRYES `.bg-fixed`: image stays in the viewport,
+ * section content scrolls over it).
  */
 export function HomePhotoInterlude() {
   const sectionRef = useRef<HTMLElement>(null);
-  const mediaRef = useRef<HTMLDivElement>(null);
   const [titleVisible, setTitleVisible] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const media = mediaRef.current;
-    if (!section || !media) return;
+    if (!section) return;
 
-    const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const desktopQuery = window.matchMedia("(min-width: 768px)");
-
-    let frame = 0;
-    let lastY = Number.NaN;
-
-    const applyStatic = (scale: number) => {
-      lastY = 0;
-      media.style.transform = `translate3d(0, 0, 0) scale(${scale})`;
-    };
-
-    const update = () => {
-      frame = 0;
-
-      if (reducedQuery.matches) {
-        applyStatic(1);
-        return;
-      }
-
-      // Mobile: keep a light oversize, no parallax travel
-      if (!desktopQuery.matches) {
-        applyStatic(1.08);
-        return;
-      }
-
-      const rect = section.getBoundingClientRect();
-      const viewH = window.innerHeight || 1;
-      // 0 = section top at viewport bottom; 1 = section bottom at viewport top
-      const travelDistance = viewH + rect.height;
-      const raw = (viewH - rect.top) / travelDistance;
-      const progress = Math.max(0, Math.min(1, raw));
-
-      // ~160px total travel: starts higher, drifts downward through the section
-      const maxShift = 80;
-      const y = -maxShift + progress * (maxShift * 2);
-
-      if (Math.abs(y - lastY) < 0.1) return;
-      lastY = y;
-      media.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(1.1)`;
-    };
-
-    const schedule = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(update);
-    };
-
-    if (reducedQuery.matches) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setTitleVisible(true);
-      applyStatic(1);
-    } else if (!desktopQuery.matches) {
-      applyStatic(1.08);
-    } else {
-      // Start shifted up so entry into the section is visibly parallaxed
-      media.style.transform = "translate3d(0, -80px, 0) scale(1.1)";
-      schedule();
+      return;
     }
 
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule, { passive: true });
-    reducedQuery.addEventListener("change", schedule);
-    desktopQuery.addEventListener("change", schedule);
-
-    const titleObserver = new IntersectionObserver(
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setTitleVisible(true);
-          titleObserver.disconnect();
+          observer.disconnect();
         }
       },
       { threshold: 0.28 },
     );
-    titleObserver.observe(section);
-
-    return () => {
-      if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-      reducedQuery.removeEventListener("change", schedule);
-      desktopQuery.removeEventListener("change", schedule);
-      titleObserver.disconnect();
-    };
+    observer.observe(section);
+    return () => observer.disconnect();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative h-[62vh] overflow-hidden bg-navy-deep sm:h-[72vh] lg:h-[85vh]"
+      className="bytys-interlude-bg relative flex min-h-[62vh] items-center justify-center sm:min-h-[72vh] lg:min-h-[85vh]"
       aria-label="Bytostiam v bytoch"
     >
-      <div
-        ref={mediaRef}
-        className="absolute inset-[-14%] will-change-transform"
-        style={{ transformOrigin: "50% 45%" }}
-      >
-        <Image
-          src="/BYTYS_interlude_courtyard.jpg"
-          alt="Bytové domy v večernom svetle s osvetlenými oknami"
-          fill
-          sizes="100vw"
-          quality={90}
-          className="object-cover object-[50%_42%]"
-          priority={false}
-        />
-      </div>
-
-      {/* Soft overall wash — keep warm window light visible */}
+      {/* Soft overlay — same role as TRYES data-overlay-dark */}
       <div
         aria-hidden
-        className="absolute inset-0 bg-[rgba(6,14,28,0.22)] sm:bg-[rgba(6,14,28,0.18)]"
-      />
-      {/* Center vignette for title only */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(4,12,26,0.42)_0%,rgba(4,12,26,0.18)_42%,transparent_72%)]"
+        className="absolute inset-0 bg-[rgba(6,14,28,0.28)] sm:bg-[rgba(6,14,28,0.22)]"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[rgba(6,14,28,0.28)] to-transparent"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(4,12,26,0.38)_0%,rgba(4,12,26,0.12)_45%,transparent_72%)]"
       />
 
-      <div className="relative z-10 flex h-full items-center justify-center px-6">
+      <div className="relative z-10 flex w-full items-center justify-center px-6 py-20">
         <div
           className={`flex max-w-4xl flex-col items-center text-center transition duration-1000 ease-out ${
             titleVisible

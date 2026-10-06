@@ -261,3 +261,31 @@ html[data-splash="1"]::before {
     transform: none;
   }
 }
+
+/*
+ * Fixed-background interlude — same principle as classic `.bg-fixed`
+ * (image locked to the viewport; section scrolls over it).
+ * Avoid overflow/transform on this element or ancestors, or fixed breaks.
+ */
+.bytys-interlude-bg {
+  background-color: var(--navy-deep);
+  background-image: url("/BYTYS_interlude_courtyard.jpg");
+  background-position: center 42%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
+}
+
+@media (min-width: 768px) {
+  .bytys-interlude-bg {
+    background-attachment: fixed;
+    background-size: 110% auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bytys-interlude-bg {
+    background-attachment: scroll;
+    background-size: cover;
+  }
+}
