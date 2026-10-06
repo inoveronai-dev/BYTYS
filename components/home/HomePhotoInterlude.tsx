@@ -4,60 +4,114 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Visual pause between Príbehy and the informational sections.
- * Uses an existing local dusk-facade story image.
+ * Cinematic pause between Príbehy and informational sections.
+ * Transform-based parallax (no background-attachment: fixed on mobile).
  */
 export function HomePhotoInterlude() {
-  const ref = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [offsetY, setOffsetY] = useState(0);
+  const [titleVisible, setTitleVisible] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setReduceMotion(reduced);
     if (reduced) {
-      setActive(true);
+      setTitleVisible(true);
       return;
     }
 
-    const observer = new IntersectionObserver(
+    const section = sectionRef.current;
+    if (!section) return;
+
+    let frame = 0;
+
+    const update = () => {
+      const rect = section.getBoundingClientRect();
+      const viewH = window.innerHeight || 1;
+      // Progress through viewport: -1 (below) → 0 (center) → 1 (above)
+      const progress = (viewH / 2 - (rect.top + rect.height / 2)) / viewH;
+      const clamped = Math.max(-1, Math.min(1, progress));
+      // Subtle vertical shift in px (image is scaled up so edges stay covered)
+      setOffsetY(clamped * 36);
+    };
+
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+
+    const titleObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setActive(true);
-          observer.disconnect();
+          setTitleVisible(true);
+          titleObserver.disconnect();
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.35 },
     );
+    titleObserver.observe(section);
 
-    observer.observe(node);
-    return () => observer.disconnect();
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      titleObserver.disconnect();
+    };
   }, []);
 
   return (
     <section
-      ref={ref}
-      aria-hidden
-      className="relative overflow-hidden bg-background py-10 sm:py-14 lg:py-16"
+      ref={sectionRef}
+      className="relative h-[58vh] overflow-hidden bg-navy sm:h-[68vh] lg:h-[80vh]"
+      aria-label="Bytostiam v bytoch"
     >
-      <div className="relative mx-auto w-full max-w-[92rem] px-0 sm:px-5 lg:px-8">
-        <div className="relative aspect-[16/9] min-h-[42vh] overflow-hidden sm:min-h-[55vh] lg:aspect-auto lg:h-[78vh]">
-          <Image
-            src="/stories/story-07.jpg"
-            alt=""
-            fill
-            sizes="100vw"
-            quality={85}
-            className={`object-cover object-[50%_45%] transition-transform duration-[1800ms] ease-out ${
-              active ? "scale-[1.03]" : "scale-100"
-            }`}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-t from-[rgba(8,18,32,0.18)] via-transparent to-[rgba(8,18,32,0.08)]"
-          />
-        </div>
+      <div
+        className="absolute inset-[-8%]"
+        style={
+          reduceMotion
+            ? undefined
+            : {
+                transform: `translate3d(0, ${offsetY}px, 0) scale(1.08)`,
+                willChange: "transform",
+              }
+        }
+      >
+        <Image
+          src="/BYTYS_interlude_courtyard.jpg"
+          alt="Bytové domy v večernom svetle s osvetlenými oknami"
+          fill
+          sizes="100vw"
+          quality={88}
+          className="object-cover object-[50%_42%]"
+          priority={false}
+        />
+      </div>
+
+      {/* Restrained overlay for title readability — windows stay visible */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[rgba(8,18,32,0.28)] sm:bg-[rgba(8,18,32,0.24)]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[55%] w-[70%] max-w-3xl -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_center,rgba(6,16,30,0.35)_0%,transparent_70%)]"
+      />
+
+      <div className="relative z-10 flex h-full items-center justify-center px-5">
+        <h2
+          className={`font-serif text-[2rem] font-semibold tracking-[-0.01em] text-white [text-shadow:0_2px_4px_rgba(6,16,30,0.45),0_8px_32px_rgba(6,16,30,0.35)] transition duration-700 ease-out sm:text-4xl sm:tracking-[0.02em] lg:text-5xl xl:text-[3.5rem] ${
+            titleVisible
+              ? "translate-y-0 opacity-100"
+              : "translate-y-4 opacity-0"
+          }`}
+        >
+          Bytostiam v bytoch
+        </h2>
       </div>
     </section>
   );
