@@ -7,7 +7,7 @@ type Pt = { x: number; y: number };
 
 /**
  * Single narrative path through Príbehy.
- * Ends clearly above the final photograph — never paints into it.
+ * Ends behind the final photograph (story 08) — nothing continues past it.
  */
 export function StoryPath() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -34,10 +34,10 @@ export function StoryPath() {
         if (lr.height < 2) return;
 
         setBox({ w: sr.width, h: sr.height });
-        // Stop well above the final image — never paint into the photo
+        // End at the top edge of story 08 — photo sits above (z) so the tip is behind it
         setEnd({
-          x: lr.left - sr.left + Math.min(36, lr.width * 0.06),
-          y: Math.max(0, lr.top - sr.top - 56),
+          x: lr.left - sr.left + Math.min(28, lr.width * 0.05),
+          y: Math.max(0, lr.top - sr.top),
         });
         setReady(true);
       });
@@ -66,20 +66,22 @@ export function StoryPath() {
   const { w, h } = box;
   const cx = w * 0.5;
 
-  /** Single main spine — the left twin was the thin stray between stories 07–08 */
+  // Approach the final photo vertically so the terminus doesn’t form a hooked arc
+  const approach = Math.max(120, h * 0.05);
+
+  /** Gentle single spine — no twin line, no marker dots */
   const spine = (x: number) =>
     `M ${x} ${h * 0.02}
-     C ${x + 28} ${h * 0.12}, ${x - 10} ${h * 0.22}, ${x} ${h * 0.32}
-     C ${x - 18} ${h * 0.42}, ${x + 14} ${h * 0.52}, ${x} ${h * 0.62}
-     C ${x - 12} ${h * 0.72}, ${x + 8} ${h * 0.8}, ${x} ${h * 0.86}
-     C ${x - 4} ${h * 0.9}, ${end.x} ${end.y - Math.max(48, h * 0.02)}, ${end.x} ${end.y}`;
+     C ${x + 22} ${h * 0.14}, ${x - 8} ${h * 0.26}, ${x} ${h * 0.38}
+     C ${x - 14} ${h * 0.5}, ${x + 10} ${h * 0.62}, ${x} ${h * 0.74}
+     C ${x - 4} ${h * 0.82}, ${end.x} ${end.y - approach}, ${end.x} ${end.y}`;
 
   const mobileSpine = (startX: number) =>
     `M ${startX} ${h * 0.02}
-     C ${startX + 8} ${h * 0.25}, ${startX - 6} ${h * 0.5}, ${startX + 4} ${h * 0.75}
-     C ${startX + 6} ${h * 0.85}, ${end.x} ${end.y - Math.max(36, h * 0.02)}, ${end.x} ${end.y}`;
+     C ${startX + 6} ${h * 0.28}, ${startX - 4} ${h * 0.55}, ${startX + 2} ${h * 0.78}
+     C ${startX + 2} ${end.y - approach}, ${end.x} ${end.y - approach * 0.4}, ${end.x} ${end.y}`;
 
-  // Hard clip so stroke never enters the final photograph
+  // Clip hard at the terminus — nothing paints past story 08
   const clipBottom = ready ? Math.max(0, h - end.y) : 0;
 
   return (
@@ -130,18 +132,5 @@ export function StoryPath() {
         />
       </svg>
     </div>
-  );
-}
-
-/** Quiet chapter marker on the story path */
-export function StorySpineMarker({ className = "" }: { className?: string }) {
-  return (
-    <span
-      aria-hidden
-      className={`pointer-events-none absolute z-[1] flex h-3 w-3 items-center justify-center ${className}`}
-    >
-      <span className="absolute h-3 w-3 rounded-full bg-green/[0.12] ring-1 ring-green/30" />
-      <span className="relative h-1.5 w-1.5 rounded-full bg-green/65" />
-    </span>
   );
 }

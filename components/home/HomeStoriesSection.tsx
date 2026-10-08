@@ -7,7 +7,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Reveal } from "@/components/ui/Reveal";
 import { StoryImage } from "@/components/stories/StoryImage";
-import { StoryPath, StorySpineMarker } from "@/components/home/StoryPath";
+import { StoryPath } from "@/components/home/StoryPath";
 
 function StoryMeta({
   story,
@@ -62,24 +62,11 @@ function StoryMeta({
 function StoryChapter({
   children,
   className = "",
-  markerClassName = "",
-  showMarker = true,
 }: {
   children: ReactNode;
   className?: string;
-  markerClassName?: string;
-  showMarker?: boolean;
 }) {
-  return (
-    <div className={`relative ${className}`}>
-      {showMarker ? (
-        <StorySpineMarker
-          className={`left-[0.85rem] top-6 sm:left-1/2 sm:-translate-x-1/2 sm:top-8 ${markerClassName}`}
-        />
-      ) : null}
-      {children}
-    </div>
-  );
+  return <div className={`relative ${className}`}>{children}</div>;
 }
 
 export function HomeStoriesSection() {
@@ -211,7 +198,7 @@ export function HomeStoriesSection() {
         </Reveal>
 
         {/* 05 + 06 — pair */}
-        <StoryChapter className="mt-12" markerClassName="top-2 sm:top-4">
+        <StoryChapter className="mt-12">
           <div className="grid gap-10 border-b border-border/70 pb-14 sm:grid-cols-2 lg:gap-12 lg:pb-20">
             {[s05, s06].map((story, i) => (
               <Reveal key={story.slug} delayMs={i * 80}>
@@ -260,7 +247,7 @@ export function HomeStoriesSection() {
 
         {/* 08 — minimal closing */}
         <Reveal delayMs={60} className="mt-12">
-          <StoryChapter showMarker={false}>
+          <StoryChapter>
             <Link
               href={`/pribehy/${s08.slug}`}
               className="group grid items-center gap-8 lg:grid-cols-12 lg:gap-10"
@@ -268,7 +255,7 @@ export function HomeStoriesSection() {
               <div className="lg:col-span-5">
                 <StoryMeta story={s08} size="lg" />
               </div>
-              <div className="overflow-hidden lg:col-span-7">
+              <div className="relative z-[1] overflow-hidden bg-stone lg:col-span-7">
                 <StoryImage
                   slot={s08.imageSlot}
                   src={s08.imageSrc}
