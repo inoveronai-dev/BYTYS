@@ -9,6 +9,8 @@ type TimelineProps = {
   mode?: "pinned" | "inline";
   /** Optional intro rendered inside the sticky shell (homepage O nás) */
   header?: ReactNode;
+  /** Optional CTA rendered under the timeline, still inside the sticky shell */
+  footer?: ReactNode;
 };
 
 const COUNT = timeline.length;
@@ -27,7 +29,7 @@ function activeIndexFromProgress(progress: number, reduced: boolean) {
  * Desktop pinned mode: sticky stage fills the viewport; scroll only advances progress.
  * Mobile / inline: progresses as the block moves through the viewport.
  */
-export function Timeline({ mode = "inline", header }: TimelineProps) {
+export function Timeline({ mode = "inline", header, footer }: TimelineProps) {
   const outerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -217,6 +219,7 @@ export function Timeline({ mode = "inline", header }: TimelineProps) {
         <div className={pinned && header ? "relative mt-8 sm:mt-10" : "relative"}>
           <Container className="relative w-full py-2 md:py-3">{stage}</Container>
         </div>
+        {footer}
       </div>
     </div>
   );

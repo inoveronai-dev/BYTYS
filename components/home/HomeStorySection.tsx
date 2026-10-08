@@ -30,6 +30,16 @@ export function HomeStorySection() {
     </Container>
   );
 
+  const footer = (
+    <Container className="relative pb-28 pt-3 sm:pb-32 sm:pt-4">
+      <Reveal delayMs={80} className="flex justify-center">
+        <ButtonLink href={homeStoryIntro.ctaHref} variant="secondary">
+          {homeStoryIntro.ctaLabel}
+        </ButtonLink>
+      </Reveal>
+    </Container>
+  );
+
   return (
     <section id="onas" className="relative bg-background">
       <div
@@ -41,15 +51,7 @@ export function HomeStorySection() {
         className="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(61,107,79,0.06),transparent_70%)]"
       />
 
-      <Timeline mode="pinned" header={intro} />
-
-      <Container className="relative pb-8 pt-3 sm:pb-10 sm:pt-4">
-        <Reveal delayMs={80} className="flex justify-center">
-          <ButtonLink href={homeStoryIntro.ctaHref} variant="secondary">
-            {homeStoryIntro.ctaLabel}
-          </ButtonLink>
-        </Reveal>
-      </Container>
+      <Timeline mode="pinned" header={intro} footer={footer} />
     </section>
   );
 }

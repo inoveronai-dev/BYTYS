@@ -63,16 +63,20 @@ function StoryChapter({
   children,
   className = "",
   markerClassName = "",
+  showMarker = true,
 }: {
   children: ReactNode;
   className?: string;
   markerClassName?: string;
+  showMarker?: boolean;
 }) {
   return (
     <div className={`relative ${className}`}>
-      <StorySpineMarker
-        className={`left-[0.85rem] top-6 sm:left-1/2 sm:-translate-x-1/2 sm:top-8 ${markerClassName}`}
-      />
+      {showMarker ? (
+        <StorySpineMarker
+          className={`left-[0.85rem] top-6 sm:left-1/2 sm:-translate-x-1/2 sm:top-8 ${markerClassName}`}
+        />
+      ) : null}
       {children}
     </div>
   );
@@ -256,7 +260,7 @@ export function HomeStoriesSection() {
 
         {/* 08 — minimal closing */}
         <Reveal delayMs={60} className="mt-12">
-          <StoryChapter>
+          <StoryChapter showMarker={false}>
             <Link
               href={`/pribehy/${s08.slug}`}
               className="group grid items-center gap-8 lg:grid-cols-12 lg:gap-10"
@@ -264,23 +268,14 @@ export function HomeStoriesSection() {
               <div className="lg:col-span-5">
                 <StoryMeta story={s08} size="lg" />
               </div>
-              <div className="relative lg:col-span-7">
-                {/* Path terminus — single line meets the photograph’s top edge */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute bottom-full left-8 hidden h-36 w-[10px] lg:block"
-                >
-                  <span className="absolute bottom-0 right-[2px] top-0 w-px bg-green/50" />
-                </span>
-                <div className="overflow-hidden">
-                  <StoryImage
-                    slot={s08.imageSlot}
-                    src={s08.imageSrc}
-                    alt={s08.imageAlt}
-                    objectPosition={s08.objectPosition}
-                    ratio="wide"
-                  />
-                </div>
+              <div className="overflow-hidden lg:col-span-7">
+                <StoryImage
+                  slot={s08.imageSlot}
+                  src={s08.imageSrc}
+                  alt={s08.imageAlt}
+                  objectPosition={s08.objectPosition}
+                  ratio="wide"
+                />
               </div>
             </Link>
           </StoryChapter>
