@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { type ReactNode } from "react";
 import { pribehy, pribehyIntro, type Pribeh } from "@/data/pribehy";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -6,6 +7,8 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Reveal } from "@/components/ui/Reveal";
 import { StoryImage } from "@/components/stories/StoryImage";
+import { StoryWaveBackground } from "@/components/home/StoryWaveBackground";
+import { StorySpineMarker } from "@/components/home/StoryRibbon";
 
 function StoryMeta({
   story,
@@ -57,22 +60,43 @@ function StoryMeta({
   );
 }
 
+function StoryChapter({
+  children,
+  className = "",
+  markerClassName = "",
+}: {
+  children: ReactNode;
+  className?: string;
+  markerClassName?: string;
+}) {
+  return (
+    <div className={`relative ${className}`}>
+      <StorySpineMarker
+        className={`left-[0.85rem] top-6 sm:left-1/2 sm:-translate-x-1/2 sm:top-8 ${markerClassName}`}
+      />
+      {children}
+    </div>
+  );
+}
+
 export function HomeStoriesSection() {
   const [s01, s02, s03, s04, s05, s06, s07, s08] = pribehy;
 
   return (
     <section
       id="pribehy"
-      className="relative bg-stone pt-28 pb-24 sm:pt-40 sm:pb-32"
+      className="relative isolate overflow-hidden pt-28 pb-24 sm:pt-40 sm:pb-32"
     >
+      <StoryWaveBackground />
+
       <span
         aria-hidden
-        className="pointer-events-none absolute left-4 top-12 font-serif text-[7rem] leading-none text-blue/[0.04] sm:left-8 sm:text-[9rem]"
+        className="pointer-events-none absolute left-4 top-12 z-[1] font-serif text-[7rem] leading-none text-blue/[0.05] sm:left-8 sm:text-[9rem]"
       >
         02
       </span>
 
-      <Container className="relative">
+      <Container className="relative z-10">
         <Reveal>
           <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -91,153 +115,167 @@ export function HomeStoriesSection() {
 
         {/* 01 — large featured */}
         <Reveal className="mt-16">
-          <Link
-            href={`/pribehy/${s01.slug}`}
-            className="group grid items-end gap-8 border-b border-border/80 pb-14 lg:grid-cols-12 lg:gap-12 lg:pb-20"
-          >
-            <div className="overflow-hidden lg:col-span-7">
-              <StoryImage
-                slot={s01.imageSlot}
-                src={s01.imageSrc}
-                alt={s01.imageAlt}
-                objectPosition={s01.objectPosition}
-                ratio="hero"
-                priority
-              />
-            </div>
-            <div className="lg:col-span-5">
-              <StoryMeta story={s01} size="xl" />
-            </div>
-          </Link>
+          <StoryChapter>
+            <Link
+              href={`/pribehy/${s01.slug}`}
+              className="group grid items-end gap-8 border-b border-border/70 pb-14 lg:grid-cols-12 lg:gap-12 lg:pb-20"
+            >
+              <div className="overflow-hidden lg:col-span-7">
+                <StoryImage
+                  slot={s01.imageSlot}
+                  src={s01.imageSrc}
+                  alt={s01.imageAlt}
+                  objectPosition={s01.objectPosition}
+                  ratio="hero"
+                  priority
+                />
+              </div>
+              <div className="lg:col-span-5">
+                <StoryMeta story={s01} size="xl" />
+              </div>
+            </Link>
+          </StoryChapter>
         </Reveal>
 
         {/* 02 — image left */}
         <Reveal delayMs={60} className="mt-12">
-          <Link
-            href={`/pribehy/${s02.slug}`}
-            className="group grid items-center gap-8 border-b border-border/80 pb-12 lg:grid-cols-12 lg:gap-10 lg:pb-16"
-          >
-            <div className="overflow-hidden lg:col-span-6">
-              <StoryImage
-                slot={s02.imageSlot}
-                src={s02.imageSrc}
-                alt={s02.imageAlt}
-                objectPosition={s02.objectPosition}
-                ratio="wide"
-              />
-            </div>
-            <div className="lg:col-span-6">
-              <StoryMeta story={s02} size="lg" />
-            </div>
-          </Link>
+          <StoryChapter>
+            <Link
+              href={`/pribehy/${s02.slug}`}
+              className="group grid items-center gap-8 border-b border-border/70 pb-12 lg:grid-cols-12 lg:gap-10 lg:pb-16"
+            >
+              <div className="overflow-hidden lg:col-span-6">
+                <StoryImage
+                  slot={s02.imageSlot}
+                  src={s02.imageSrc}
+                  alt={s02.imageAlt}
+                  objectPosition={s02.objectPosition}
+                  ratio="wide"
+                />
+              </div>
+              <div className="lg:col-span-6">
+                <StoryMeta story={s02} size="lg" />
+              </div>
+            </Link>
+          </StoryChapter>
         </Reveal>
 
         {/* 03 — reverse */}
         <Reveal delayMs={60} className="mt-12">
-          <Link
-            href={`/pribehy/${s03.slug}`}
-            className="group grid items-center gap-8 border-b border-border/80 pb-12 lg:grid-cols-12 lg:gap-10 lg:pb-16"
-          >
-            <div className="overflow-hidden lg:order-2 lg:col-span-6">
-              <StoryImage
-                slot={s03.imageSlot}
-                src={s03.imageSrc}
-                alt={s03.imageAlt}
-                objectPosition={s03.objectPosition}
-                ratio="wide"
-              />
-            </div>
-            <div className="lg:order-1 lg:col-span-6">
-              <StoryMeta story={s03} size="lg" align="right" />
-            </div>
-          </Link>
+          <StoryChapter>
+            <Link
+              href={`/pribehy/${s03.slug}`}
+              className="group grid items-center gap-8 border-b border-border/70 pb-12 lg:grid-cols-12 lg:gap-10 lg:pb-16"
+            >
+              <div className="overflow-hidden lg:order-2 lg:col-span-6">
+                <StoryImage
+                  slot={s03.imageSlot}
+                  src={s03.imageSrc}
+                  alt={s03.imageAlt}
+                  objectPosition={s03.objectPosition}
+                  ratio="wide"
+                />
+              </div>
+              <div className="lg:order-1 lg:col-span-6">
+                <StoryMeta story={s03} size="lg" align="right" />
+              </div>
+            </Link>
+          </StoryChapter>
         </Reveal>
 
         {/* 04 — wide feature */}
         <Reveal delayMs={60} className="mt-12">
-          <Link
-            href={`/pribehy/${s04.slug}`}
-            className="group block border-b border-border/80 pb-14 lg:pb-20"
-          >
-            <div className="overflow-hidden">
-              <StoryImage
-                slot={s04.imageSlot}
-                src={s04.imageSrc}
-                alt={s04.imageAlt}
-                objectPosition={s04.objectPosition}
-                ratio="wide"
-                className="min-h-[240px] sm:min-h-[320px] lg:min-h-[420px]"
-              />
-            </div>
-            <div className="mt-8 max-w-3xl">
-              <StoryMeta story={s04} size="lg" />
-            </div>
-          </Link>
+          <StoryChapter>
+            <Link
+              href={`/pribehy/${s04.slug}`}
+              className="group block border-b border-border/70 pb-14 lg:pb-20"
+            >
+              <div className="overflow-hidden">
+                <StoryImage
+                  slot={s04.imageSlot}
+                  src={s04.imageSrc}
+                  alt={s04.imageAlt}
+                  objectPosition={s04.objectPosition}
+                  ratio="wide"
+                  className="min-h-[240px] sm:min-h-[320px] lg:min-h-[420px]"
+                />
+              </div>
+              <div className="mt-8 max-w-3xl">
+                <StoryMeta story={s04} size="lg" />
+              </div>
+            </Link>
+          </StoryChapter>
         </Reveal>
 
         {/* 05 + 06 — pair */}
-        <div className="mt-12 grid gap-10 border-b border-border/80 pb-14 sm:grid-cols-2 lg:gap-12 lg:pb-20">
-          {[s05, s06].map((story, i) => (
-            <Reveal key={story.slug} delayMs={i * 80}>
-              <Link href={`/pribehy/${story.slug}`} className="group block">
-                <div className="overflow-hidden">
-                  <StoryImage
-                    slot={story.imageSlot}
-                    src={story.imageSrc}
-                    alt={story.imageAlt}
-                    objectPosition={story.objectPosition}
-                    ratio="row"
-                  />
-                </div>
-                <div className="mt-6">
-                  <StoryMeta story={story} size="md" />
-                </div>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
+        <StoryChapter className="mt-12" markerClassName="top-2 sm:top-4">
+          <div className="grid gap-10 border-b border-border/70 pb-14 sm:grid-cols-2 lg:gap-12 lg:pb-20">
+            {[s05, s06].map((story, i) => (
+              <Reveal key={story.slug} delayMs={i * 80}>
+                <Link href={`/pribehy/${story.slug}`} className="group block">
+                  <div className="overflow-hidden">
+                    <StoryImage
+                      slot={story.imageSlot}
+                      src={story.imageSrc}
+                      alt={story.imageAlt}
+                      objectPosition={story.objectPosition}
+                      ratio="row"
+                    />
+                  </div>
+                  <div className="mt-6">
+                    <StoryMeta story={story} size="md" />
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </StoryChapter>
 
         {/* 07 — prominent */}
         <Reveal delayMs={60} className="mt-12">
-          <Link
-            href={`/pribehy/${s07.slug}`}
-            className="group grid items-center gap-8 border-b border-border/80 pb-14 lg:grid-cols-12 lg:gap-12 lg:pb-20"
-          >
-            <div className="overflow-hidden lg:col-span-8">
-              <StoryImage
-                slot={s07.imageSlot}
-                src={s07.imageSrc}
-                alt={s07.imageAlt}
-                objectPosition={s07.objectPosition}
-                ratio="wide"
-                className="min-h-[260px] sm:min-h-[340px]"
-              />
-            </div>
-            <div className="lg:col-span-4">
-              <StoryMeta story={s07} size="lg" />
-            </div>
-          </Link>
+          <StoryChapter>
+            <Link
+              href={`/pribehy/${s07.slug}`}
+              className="group grid items-center gap-8 border-b border-border/70 pb-14 lg:grid-cols-12 lg:gap-12 lg:pb-20"
+            >
+              <div className="overflow-hidden lg:col-span-8">
+                <StoryImage
+                  slot={s07.imageSlot}
+                  src={s07.imageSrc}
+                  alt={s07.imageAlt}
+                  objectPosition={s07.objectPosition}
+                  ratio="wide"
+                  className="min-h-[260px] sm:min-h-[340px]"
+                />
+              </div>
+              <div className="lg:col-span-4">
+                <StoryMeta story={s07} size="lg" />
+              </div>
+            </Link>
+          </StoryChapter>
         </Reveal>
 
         {/* 08 — minimal closing */}
         <Reveal delayMs={60} className="mt-12">
-          <Link
-            href={`/pribehy/${s08.slug}`}
-            className="group grid items-center gap-8 lg:grid-cols-12 lg:gap-10"
-          >
-            <div className="lg:col-span-5">
-              <StoryMeta story={s08} size="lg" />
-            </div>
-            <div className="overflow-hidden lg:col-span-7">
-              <StoryImage
-                slot={s08.imageSlot}
-                src={s08.imageSrc}
-                alt={s08.imageAlt}
-                objectPosition={s08.objectPosition}
-                ratio="wide"
-              />
-            </div>
-          </Link>
+          <StoryChapter>
+            <Link
+              href={`/pribehy/${s08.slug}`}
+              className="group grid items-center gap-8 lg:grid-cols-12 lg:gap-10"
+            >
+              <div className="lg:col-span-5">
+                <StoryMeta story={s08} size="lg" />
+              </div>
+              <div className="overflow-hidden lg:col-span-7">
+                <StoryImage
+                  slot={s08.imageSlot}
+                  src={s08.imageSrc}
+                  alt={s08.imageAlt}
+                  objectPosition={s08.objectPosition}
+                  ratio="wide"
+                />
+              </div>
+            </Link>
+          </StoryChapter>
         </Reveal>
 
         <Reveal delayMs={80} className="mt-14">

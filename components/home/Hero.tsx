@@ -1,18 +1,85 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { site } from "@/data/site";
 
+/**
+ * Hero with scroll-linked cinematic zoom toward the warm window cluster.
+ * Only the image moves; copy and CTAs stay fixed.
+ */
 export function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const media = mediaRef.current;
+    if (!section || !media) return;
+
+    const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    let lastScale = Number.NaN;
+
+    const apply = (scale: number) => {
+      if (Math.abs(scale - lastScale) < 0.0008) return;
+      lastScale = scale;
+      media.style.transform = `scale(${scale.toFixed(4)})`;
+    };
+
+    const update = () => {
+      frame = 0;
+      if (reducedQuery.matches) {
+        apply(1);
+        return;
+      }
+
+      const rect = section.getBoundingClientRect();
+      const height = Math.max(rect.height, 1);
+      // 0 at top; 1 when the hero has fully scrolled out upward
+      const progress = Math.max(0, Math.min(1, -rect.top / height));
+      apply(1 + progress * 0.08);
+    };
+
+    const schedule = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(update);
+    };
+
+    apply(1);
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
+    reducedQuery.addEventListener("change", schedule);
+
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      reducedQuery.removeEventListener("change", schedule);
+    };
+  }, []);
+
   return (
-    <section className="relative isolate min-h-[90svh] overflow-hidden text-white sm:min-h-[95svh] lg:min-h-screen">
-      <Image
-        src={site.heroImageSrc}
-        alt="Fasáda bytového domu v večernom svetle s osvetlenými oknami"
-        fill
-        priority
-        quality={90}
-        sizes="100vw"
-        className="object-cover object-[50%_40%] sm:object-[50%_45%] lg:object-[48%_42%]"
-      />
+    <section
+      ref={sectionRef}
+      className="relative isolate min-h-[90svh] overflow-hidden text-white sm:min-h-[95svh] lg:min-h-screen"
+    >
+      <div
+        ref={mediaRef}
+        className="absolute inset-0 will-change-transform"
+        style={{ transformOrigin: "48% 42%", transform: "scale(1)" }}
+      >
+        <Image
+          src={site.heroImageSrc}
+          alt="Fasáda bytového domu v večernom svetle s osvetlenými oknami"
+          fill
+          priority
+          quality={90}
+          sizes="100vw"
+          className="object-cover object-[50%_40%] sm:object-[50%_45%] lg:object-[48%_42%]"
+        />
+      </div>
 
       {/* Very light top support for header only — windows stay visible */}
       <div
@@ -24,7 +91,6 @@ export function Hero() {
         <div className="h-[4.25rem] shrink-0 sm:h-[4.75rem]" aria-hidden />
 
         <div className="flex flex-1 items-center justify-center px-5 pb-16 pt-4 sm:px-8 sm:pb-20 lg:px-10 lg:pb-24">
-          {/* Slightly below true center for balance with header */}
           <div className="relative w-full max-w-[52rem] translate-y-3 text-center sm:translate-y-4 lg:translate-y-6">
             <div
               aria-hidden
