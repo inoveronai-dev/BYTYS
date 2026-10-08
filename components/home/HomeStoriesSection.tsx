@@ -7,8 +7,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Reveal } from "@/components/ui/Reveal";
 import { StoryImage } from "@/components/stories/StoryImage";
-import { StoryWaveBackground } from "@/components/home/StoryWaveBackground";
-import { StorySpineMarker } from "@/components/home/StoryRibbon";
+import { StoryPath, StorySpineMarker } from "@/components/home/StoryPath";
 
 function StoryMeta({
   story,
@@ -85,13 +84,13 @@ export function HomeStoriesSection() {
   return (
     <section
       id="pribehy"
-      className="relative isolate overflow-hidden pt-28 pb-24 sm:pt-40 sm:pb-32"
+      className="relative isolate overflow-hidden bg-stone pt-28 pb-24 sm:pt-40 sm:pb-32"
     >
-      <StoryWaveBackground />
+      <StoryPath />
 
       <span
         aria-hidden
-        className="pointer-events-none absolute left-4 top-12 z-[1] font-serif text-[7rem] leading-none text-blue/[0.05] sm:left-8 sm:text-[9rem]"
+        className="pointer-events-none absolute left-4 top-12 z-[1] font-serif text-[7rem] leading-none text-blue/[0.04] sm:left-8 sm:text-[9rem]"
       >
         02
       </span>

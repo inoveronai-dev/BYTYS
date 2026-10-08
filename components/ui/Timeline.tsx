@@ -172,11 +172,11 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
       <div
         className={
           pinned
-            ? "md:sticky md:top-[4.75rem] md:flex md:h-[calc(100svh-4.75rem)] md:items-center"
+            ? "md:sticky md:top-[4.75rem] md:flex md:h-[calc(100svh-4.75rem)] md:items-start md:pt-6"
             : ""
         }
       >
-        <Container className="relative w-full py-2 md:py-8">{stage}</Container>
+        <Container className="relative w-full py-2 md:py-4">{stage}</Container>
       </div>
     </div>
   );

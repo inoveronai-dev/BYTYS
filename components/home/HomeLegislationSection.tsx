@@ -4,6 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionWaveTop } from "@/components/home/SectionWaveTop";
 import { legislativaCategories } from "@/data/legislativa";
 
 function countLabel(count: number) {
@@ -47,10 +48,11 @@ const icons = {
 
 export function HomeLegislationSection() {
   return (
-    <section className="relative overflow-hidden bg-blue-tint py-24 sm:py-28">
+    <section className="relative overflow-hidden bg-blue-tint pb-24 pt-32 sm:pb-28 sm:pt-36">
+      <SectionWaveTop fill="#ffffff" />
       <div
         aria-hidden
-        className="pointer-events-none absolute -left-20 top-0 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(30,58,95,0.08),transparent_68%)]"
+        className="pointer-events-none absolute -left-20 top-24 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(30,58,95,0.08),transparent_68%)]"
       />
       <div
         aria-hidden

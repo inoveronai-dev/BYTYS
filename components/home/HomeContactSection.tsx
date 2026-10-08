@@ -4,10 +4,15 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ContactBlock } from "@/components/ui/ContactBlock";
 import { Reveal } from "@/components/ui/Reveal";
+import { SectionWaveTop } from "@/components/home/SectionWaveTop";
 
 export function HomeContactSection() {
   return (
-    <section id="spojenie" className="relative overflow-hidden bg-navy py-24 sm:py-32">
+    <section
+      id="spojenie"
+      className="relative overflow-hidden bg-navy pb-24 pt-32 sm:pb-32 sm:pt-40"
+    >
+      <SectionWaveTop fill="#eef2f6" amplitude="lg" />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(61,107,79,0.1),transparent_42%)]"

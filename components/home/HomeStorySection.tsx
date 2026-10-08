@@ -39,7 +39,7 @@ export function HomeStorySection() {
         </Reveal>
       </Container>
 
-      <div className="relative mt-16 sm:mt-20">
+      <div className="relative mt-8 sm:mt-10">
         <Timeline mode="pinned" />
       </div>
 
