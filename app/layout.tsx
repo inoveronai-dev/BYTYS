@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Source_Serif_4 } from "next/font/google";
+import { Fraunces, Source_Sans_3, Source_Serif_4 } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Main } from "@/components/layout/Main";
@@ -15,6 +15,13 @@ const sourceSans = Source_Sans_3({
 
 const sourceSerif = Source_Serif_4({
   variable: "--font-source-serif",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+});
+
+/** Soft editorial display face — warm welcome headlines */
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin", "latin-ext"],
   display: "swap",
 });
@@ -35,7 +42,7 @@ export default function RootLayout({
   return (
     <html
       lang="sk"
-      className={`${sourceSans.variable} ${sourceSerif.variable} h-full antialiased`}
+      className={`${sourceSans.variable} ${sourceSerif.variable} ${fraunces.variable} h-full antialiased`}
     >
       <head>
         <script

@@ -2,7 +2,8 @@ export const site = {
   name: "BYTYS s.r.o.",
   shortName: "BYTYS",
   tagline: "SPRÁVCA BYTOVÝCH DOMOV",
-  heroHeadline: "Správa domov. S porozumením pre ľudí.",
+  heroHeadline:
+    "Vitajte v priestore venovanom ľuďom žijúcim v bytových domoch",
   heroSupport:
     "Skúsenosti so životom v bytovom dome pretavené do každodennej správy.",
   welcome: "Vitajte v priestore venovanom ľuďom žijúcim v bytových domoch",

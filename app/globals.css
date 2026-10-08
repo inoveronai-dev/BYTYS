@@ -35,6 +35,7 @@
   --color-stone: var(--stone);
   --font-sans: var(--font-source-sans);
   --font-serif: var(--font-source-serif);
+  --font-display: var(--font-fraunces);
 }
 
 html {

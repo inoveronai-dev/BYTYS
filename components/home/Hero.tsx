@@ -32,10 +32,8 @@ export function Hero() {
             />
 
             <div className="relative mx-auto flex flex-col items-center">
-              <h1 className="mx-auto max-w-[22rem] font-serif text-[2rem] font-semibold leading-[1.08] tracking-[-0.015em] text-white [text-shadow:0_1px_3px_rgba(6,16,30,0.5),0_4px_22px_rgba(6,16,30,0.35)] sm:max-w-[40rem] sm:text-[2.65rem] sm:leading-[1.06] lg:max-w-[50rem] lg:text-[3.15rem] lg:leading-[1.05]">
-                Správa domov.
-                <br />
-                S porozumením pre ľudí.
+              <h1 className="mx-auto max-w-[20rem] font-display text-[1.7rem] font-medium leading-[1.22] tracking-[-0.01em] text-white [text-shadow:0_1px_3px_rgba(6,16,30,0.5),0_4px_22px_rgba(6,16,30,0.35)] sm:max-w-[36rem] sm:text-[2.35rem] sm:leading-[1.2] lg:max-w-[44rem] lg:text-[2.85rem] lg:leading-[1.18]">
+                {site.heroHeadline}
               </h1>
 
               <span
