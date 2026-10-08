@@ -11,6 +11,9 @@ type TimelineProps = {
 
 const COUNT = timeline.length;
 
+/** Scroll distance (as a fraction of viewport) to walk all five milestones */
+const PIN_TRAVEL_VH = 0.5;
+
 function activeIndexFromProgress(progress: number, reduced: boolean) {
   if (reduced) return COUNT - 1;
   if (progress <= 0.02) return 0;
@@ -24,6 +27,7 @@ function activeIndexFromProgress(progress: number, reduced: boolean) {
  */
 export function Timeline({ mode = "inline" }: TimelineProps) {
   const outerRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [reduced, setReduced] = useState(false);
@@ -36,13 +40,30 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
     let frame = 0;
     let lastProgress = -1;
 
+    const syncPinHeight = () => {
+      const outer = outerRef.current;
+      const sticky = stickyRef.current;
+      if (!outer || !sticky) return;
+
+      if (mode === "pinned" && desktopQuery.matches) {
+        const travel = Math.round(
+          (window.innerHeight || 1) * PIN_TRAVEL_VH,
+        );
+        outer.style.height = `${sticky.offsetHeight + travel}px`;
+      } else {
+        outer.style.height = "";
+      }
+    };
+
     const update = () => {
       frame = 0;
       const outer = outerRef.current;
+      const sticky = stickyRef.current;
       const bar = progressRef.current;
       if (!outer || !bar) return;
 
       const desktop = desktopQuery.matches;
+      syncPinHeight();
 
       if (reducedQuery.matches) {
         setReduced(true);
@@ -57,9 +78,12 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
       const viewH = window.innerHeight || 1;
       let next = 0;
 
-      if (mode === "pinned" && desktop) {
-        const total = Math.max(rect.height - viewH, 1);
-        next = Math.max(0, Math.min(1, -rect.top / total));
+      if (mode === "pinned" && desktop && sticky) {
+        // Hit 1 exactly when sticky releases (accounts for sticky `top` offset).
+        const stickyH = sticky.offsetHeight;
+        const stickyTop = Number.parseFloat(getComputedStyle(sticky).top) || 0;
+        const total = Math.max(rect.height - stickyH, 1);
+        next = Math.max(0, Math.min(1, (stickyTop - rect.top) / total));
       } else {
         const total = Math.max(rect.height + viewH * 0.4, 1);
         next = Math.max(0, Math.min(1, (viewH * 0.5 - rect.top) / total));
@@ -78,10 +102,14 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
       frame = window.requestAnimationFrame(update);
     };
 
+    syncPinHeight();
     schedule();
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule, { passive: true });
-    const onFlags = () => schedule();
+    const onFlags = () => {
+      syncPinHeight();
+      schedule();
+    };
     reducedQuery.addEventListener("change", onFlags);
     desktopQuery.addEventListener("change", onFlags);
 
@@ -166,17 +194,22 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
   return (
     <div
       ref={outerRef}
-      className={pinned ? "relative md:h-[210vh]" : "relative"}
+      className={
+        pinned
+          ? "relative md:h-[calc(11rem+50vh)] md:min-h-0"
+          : "relative"
+      }
       aria-label="História BYTYS"
     >
       <div
+        ref={stickyRef}
         className={
           pinned
-            ? "md:sticky md:top-[4.75rem] md:flex md:h-[calc(100svh-4.75rem)] md:items-start md:pt-6"
+            ? "md:sticky md:top-[4.75rem] md:pt-2"
             : ""
         }
       >
-        <Container className="relative w-full py-2 md:py-4">{stage}</Container>
+        <Container className="relative w-full py-2 md:py-3">{stage}</Container>
       </div>
     </div>
   );

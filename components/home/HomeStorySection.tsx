@@ -43,7 +43,7 @@ export function HomeStorySection() {
         <Timeline mode="pinned" />
       </div>
 
-      <Container className="relative pb-28 pt-6 sm:pb-36 sm:pt-8">
+      <Container className="relative pb-8 pt-3 sm:pb-10 sm:pt-4">
         <Reveal delayMs={80} className="flex justify-center">
           <ButtonLink href={homeStoryIntro.ctaHref} variant="secondary">
             {homeStoryIntro.ctaLabel}

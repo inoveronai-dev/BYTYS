@@ -1,87 +1,125 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+type Box = { w: number; h: number };
+type Pt = { x: number; y: number };
+
 /**
- * Narrow continuous narrative path through the Príbehy section.
- * Abstract ribbon only — not a road, not large green fields.
+ * Narrow dual-line narrative path through Príbehy.
+ * Drawn in section pixel space so both lines terminate on the final photograph.
  */
 export function StoryPath() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [box, setBox] = useState<Box>({ w: 100, h: 1000 });
+  const [end, setEnd] = useState<Pt>({ x: 50, y: 900 });
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const section = wrap?.parentElement;
+    if (!wrap || !section) return;
+
+    const measure = () => {
+      const sr = section.getBoundingClientRect();
+      const imgs = section.querySelectorAll("img");
+      const last = imgs[imgs.length - 1];
+      if (!last || sr.height < 10) return;
+
+      const lr = last.getBoundingClientRect();
+      setBox({ w: sr.width, h: sr.height });
+      // Top edge of the final image, slightly inset from its left side
+      setEnd({
+        x: lr.left - sr.left + Math.min(36, lr.width * 0.06),
+        y: lr.top - sr.top,
+      });
+      setReady(true);
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(section);
+    window.addEventListener("resize", measure, { passive: true });
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const { w, h } = box;
+  const cx = w * 0.5;
+  const gap = 5;
+
+  const spine = (offset: number) =>
+    `M ${cx + offset} ${h * 0.02}
+     C ${cx + offset + 28} ${h * 0.12}, ${cx + offset - 10} ${h * 0.22}, ${cx + offset} ${h * 0.32}
+     C ${cx + offset - 18} ${h * 0.42}, ${cx + offset + 14} ${h * 0.52}, ${cx + offset} ${h * 0.62}
+     C ${cx + offset - 12} ${h * 0.72}, ${cx + offset + 8} ${h * 0.8}, ${cx + offset} ${h * 0.86}
+     C ${cx + offset - 4} ${h * 0.9}, ${end.x + offset} ${end.y - Math.max(48, h * 0.02)}, ${end.x + offset} ${end.y}`;
+
+  const mobileSpine = (offset: number, startX: number) =>
+    `M ${startX} ${h * 0.02}
+     C ${startX + 8} ${h * 0.25}, ${startX - 6} ${h * 0.5}, ${startX + 4} ${h * 0.75}
+     C ${startX + 6} ${h * 0.85}, ${end.x + offset} ${end.y - Math.max(36, h * 0.02)}, ${end.x + offset} ${end.y}`;
+
   return (
     <div
+      ref={wrapRef}
       aria-hidden
-      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      className="pointer-events-none absolute inset-0 z-[5] overflow-hidden"
     >
       <svg
         className="absolute inset-0 hidden h-full w-full sm:block"
-        viewBox="0 0 100 1200"
+        width={w}
+        height={h}
+        viewBox={`0 0 ${Math.max(w, 1)} ${Math.max(h, 1)}`}
         preserveAspectRatio="none"
         focusable="false"
+        style={{ opacity: ready ? 1 : 0 }}
       >
-        {/* Soft filled ribbon (~6–8 units ≈ 60–80px at typical widths) */}
         <path
-          d="M46 20
-             C52 90, 58 150, 54 220
-             C50 290, 42 350, 46 420
-             C50 490, 58 550, 52 620
-             C46 690, 40 750, 46 820
-             C52 890, 56 950, 50 1020
-             C44 1090, 48 1140, 50 1180
-             L56 1180
-             C54 1140, 50 1090, 56 1020
-             C62 950, 58 890, 52 820
-             C46 750, 52 690, 58 620
-             C64 550, 56 490, 52 420
-             C48 350, 56 290, 60 220
-             C64 150, 58 90, 52 20
-             Z"
-          fill="rgb(61,107,79)"
-          fillOpacity="0.08"
-        />
-        {/* Thin brighter core */}
-        <path
-          d="M50 24
-             C56 100, 52 180, 50 260
-             C48 340, 54 420, 50 500
-             C46 580, 52 660, 50 740
-             C48 820, 54 900, 50 980
-             C46 1060, 50 1120, 50 1176"
+          d={spine(-gap)}
           fill="none"
           stroke="rgb(61,107,79)"
-          strokeOpacity="0.32"
-          strokeWidth="0.9"
-          strokeLinecap="round"
+          strokeOpacity="0.5"
+          strokeWidth="1.6"
+          strokeLinecap="butt"
+        />
+        <path
+          d={spine(gap)}
+          fill="none"
+          stroke="rgb(61,107,79)"
+          strokeOpacity="0.5"
+          strokeWidth="1.6"
+          strokeLinecap="butt"
         />
       </svg>
 
-      {/* Mobile — thinner left-of-center path */}
       <svg
         className="absolute inset-0 h-full w-full sm:hidden"
-        viewBox="0 0 100 1200"
+        width={w}
+        height={h}
+        viewBox={`0 0 ${Math.max(w, 1)} ${Math.max(h, 1)}`}
         preserveAspectRatio="none"
         focusable="false"
+        style={{ opacity: ready ? 1 : 0 }}
       >
         <path
-          d="M12 16
-             C16 100, 10 200, 14 300
-             C18 400, 12 500, 14 600
-             C16 700, 10 800, 14 900
-             C18 1000, 12 1100, 14 1180
-             L20 1180
-             C18 1100, 24 1000, 20 900
-             C16 800, 22 700, 20 600
-             C18 500, 24 400, 20 300
-             C16 200, 22 100, 18 16
-             Z"
-          fill="rgb(61,107,79)"
-          fillOpacity="0.1"
-        />
-        <path
-          d="M16 20
-             C18 120, 14 240, 16 360
-             C18 480, 14 600, 16 720
-             C18 840, 14 960, 16 1176"
+          d={mobileSpine(-gap, w * 0.12)}
           fill="none"
           stroke="rgb(61,107,79)"
-          strokeOpacity="0.36"
-          strokeWidth="1.1"
-          strokeLinecap="round"
+          strokeOpacity="0.48"
+          strokeWidth="1.6"
+          strokeLinecap="butt"
+        />
+        <path
+          d={mobileSpine(gap, w * 0.155)}
+          fill="none"
+          stroke="rgb(61,107,79)"
+          strokeOpacity="0.48"
+          strokeWidth="1.6"
+          strokeLinecap="butt"
         />
       </svg>
     </div>
