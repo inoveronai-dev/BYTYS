@@ -265,12 +265,11 @@ export function HomeStoriesSection() {
                 <StoryMeta story={s08} size="lg" />
               </div>
               <div className="relative lg:col-span-7">
-                {/* Dual path lines terminate on the photograph’s top edge */}
+                {/* Path terminus — single line meets the photograph’s top edge */}
                 <span
                   aria-hidden
                   className="pointer-events-none absolute bottom-full left-8 hidden h-36 w-[10px] lg:block"
                 >
-                  <span className="absolute bottom-0 left-[2px] top-0 w-px bg-green/50" />
                   <span className="absolute bottom-0 right-[2px] top-0 w-px bg-green/50" />
                 </span>
                 <div className="overflow-hidden">

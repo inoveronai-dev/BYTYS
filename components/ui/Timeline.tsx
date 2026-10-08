@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { timeline } from "@/data/story";
 
 type TimelineProps = {
   /** pinned = tall sticky scroll story (homepage); inline = compact (about page) */
   mode?: "pinned" | "inline";
+  /** Optional intro rendered inside the sticky shell (homepage O nás) */
+  header?: ReactNode;
 };
 
 const COUNT = timeline.length;
@@ -22,10 +24,10 @@ function activeIndexFromProgress(progress: number, reduced: boolean) {
 
 /**
  * Scroll-linked BYTYS history timeline.
- * Desktop pinned mode: sticky stage + green line grows with scroll.
+ * Desktop pinned mode: sticky stage fills the viewport; scroll only advances progress.
  * Mobile / inline: progresses as the block moves through the viewport.
  */
-export function Timeline({ mode = "inline" }: TimelineProps) {
+export function Timeline({ mode = "inline", header }: TimelineProps) {
   const outerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -49,6 +51,8 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
         const travel = Math.round(
           (window.innerHeight || 1) * PIN_TRAVEL_VH,
         );
+        // Outer = viewport-filling sticky height + travel so page below
+        // cannot enter the viewport until progress hits 1 / sticky releases.
         outer.style.height = `${sticky.offsetHeight + travel}px`;
       } else {
         outer.style.height = "";
@@ -196,7 +200,7 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
       ref={outerRef}
       className={
         pinned
-          ? "relative md:h-[calc(11rem+50vh)] md:min-h-0"
+          ? "relative md:min-h-[calc(100svh-4.75rem+50vh)]"
           : "relative"
       }
       aria-label="História BYTYS"
@@ -205,11 +209,14 @@ export function Timeline({ mode = "inline" }: TimelineProps) {
         ref={stickyRef}
         className={
           pinned
-            ? "md:sticky md:top-[4.75rem] md:pt-2"
+            ? "md:sticky md:top-[4.75rem] md:flex md:min-h-[calc(100svh-4.75rem)] md:flex-col md:justify-start md:pt-2"
             : ""
         }
       >
-        <Container className="relative w-full py-2 md:py-3">{stage}</Container>
+        {header}
+        <div className={pinned && header ? "relative mt-8 sm:mt-10" : "relative"}>
+          <Container className="relative w-full py-2 md:py-3">{stage}</Container>
+        </div>
       </div>
     </div>
   );
